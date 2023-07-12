@@ -1,4 +1,6 @@
 import axios from "axios";
+import SlimSelect from 'slim-select';
+import Notiflix from 'notiflix';
 
 axios.defaults.headers.common['x-api-key'] =
     'live_2FIPZaRpSWrmrpVAqsIwO521FigPQDV9aCnYjgqyKwOsqKSixw4ZHl1WFD5gRceP';
