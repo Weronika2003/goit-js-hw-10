@@ -24,3 +24,7 @@
   background-size: cover;
   background-position: center;
 }/*# sourceMappingURL=index.css.map */
+
+.hidden {
+  display: none;
+}
