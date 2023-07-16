@@ -46,8 +46,8 @@ select.addEventListener('change', event => {
           catInfo.innerHTML = `
             <img src="${data.url}" alt="Cat" width = "560">
             <h2>${breed.name}</h2>
-            <p>Description: ${breed.description}</p>
-            <p>Temperament: ${breed.temperament}</p>
+            <p>${breed.description}</p>
+            <p><b>Temperament:</b> ${breed.temperament}</p>
           `;
           loader.classList.add('hidden');
           catInfo.classList.remove('hidden');
