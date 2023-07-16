@@ -1,9 +1,10 @@
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 
-const select = document.querySelector('.breed-select');
-const catInfo = document.querySelector('.cat-info');
-const loader = document.querySelector('.loader');
-const onError = document.querySelector('.error');
+const body = document.querySelector('body');
+const select = body.querySelector('.breed-select');
+const catInfo = body.querySelector('.cat-info');
+const loader = body.querySelector('.loader');
+const onError = body.querySelector('.error');
 
 function breedSelect(breeds) {
   const selectItems = breeds.map(({ name, id }) => {
