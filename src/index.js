@@ -4,7 +4,7 @@ const body = document.querySelector('body');
 const select = body.querySelector('.breed-select');
 const catInfo = body.querySelector('.cat-info');
 const loader = body.querySelector('.loader');
-const onError = body.querySelector('.error');
+const errorEl = body.querySelector('.error');
 
 function breedSelect(breeds) {
   const selectItems = breeds.map(({ name, id }) => {
@@ -16,7 +16,7 @@ function breedSelect(breeds) {
 window.addEventListener('load', event => {
   loader.classList.remove('hidden');
   select.classList.add('hidden');
-  onError.classList.add('hidden');
+  errorEl.classList.add('hidden');
 
   fetchBreeds()
     .then(breeds => {
@@ -26,7 +26,7 @@ window.addEventListener('load', event => {
     })
     .catch(error => {
       loader.classList.add('hidden');
-      onError.classList.remove('hidden');
+      errorEl.classList.remove('hidden');
       console.log(error);
     });
 });
@@ -56,12 +56,12 @@ select.addEventListener('change', event => {
         .catch(error => {
           console.log(error);
           loader.classList.add('hidden');
-          onError.classList.remove('hidden');
+          errorEl.classList.remove('hidden');
         });
     })
     .catch(error => {
       loader.classList.add('hidden');
-      onError.classList.remove('hidden');
+      errorEl.classList.remove('hidden');
       console.log(error);
     });
 });
