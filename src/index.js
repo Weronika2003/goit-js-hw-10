@@ -21,7 +21,7 @@ function handlerClick(e) {
 
   fetchCatByBreed(breeds)
     .then(data => {
-      container.innerHTML = createMarkup(data);
+      container.innerHTML = markup(data);
     })
     .catch(error => {
       Notiflix.Report.failure(
@@ -37,7 +37,7 @@ function handlerClick(e) {
     });
 }
 
-function createOptions() {
+function options() {
   select.hidden = true;
   fetchBreeds()
     .then(data => {
@@ -69,9 +69,9 @@ function createOptions() {
       select.hidden = false;
     });
 }
-createOptions();
+options();
 
-function createMarkup(array) {
+function markup(array) {
   return array
     .map(({ url, breeds: [{ description, name, temperament }] }) => {
       return `<img src="${url}" alt="${name}" width="400"/>

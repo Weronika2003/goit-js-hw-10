@@ -1,4 +1,4 @@
-const BASE_URL = 'https://api.thecatapi.com/v1';
+const MAIN_URL = 'https://api.thecatapi.com/v1';
 const API_KEY =
   'live_2FIPZaRpSWrmrpVAqsIwO521FigPQDV9aCnYjgqyKwOsqKSixw4ZHl1WFD5gRceP';
 
@@ -7,11 +7,11 @@ function fetchBreeds() {
   const PARAMS = new URLSearchParams({
     api_key: API_KEY,
   });
-  return fetch(`${BASE_URL}${END_POINT}?${PARAMS}`).then(resp => {
-    if (!resp.ok) {
-      throw new Error(resp.status);
+  return fetch(`${MAIN_URL}${END_POINT}?${PARAMS}`).then(response => {
+    if (!response.ok) {
+      throw new Error(response.status);
     }
-    return resp.json();
+    return response.json();
   });
 }
 
@@ -22,11 +22,11 @@ function fetchCatByBreed(breedId) {
     api_key: API_KEY,
     breed_ids: breedId,
   });
-  return fetch(`${BASE_URL}${END_POINT}?${PARAMS}`).then(resp => {
-    if (!resp.ok) {
+  return fetch(`${MAIN_URL}${END_POINT}?${PARAMS}`).then(response => {
+    if (!response.ok) {
       throw new Error(resp.statusText);
     }
-    return resp.json();
+    return response.json();
   });
 }
 export { fetchBreeds, fetchCatByBreed };
