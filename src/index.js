@@ -1,67 +1,84 @@
-import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
+import { fetchBreeds } from './cat-api';
+import { fetchCatByBreed } from './cat-api';
+import Notiflix from 'notiflix';
+import SlimSelect from 'slim-select';
+import 'slim-select/dist/slimselect.css';
 
-const body = document.querySelector('body');
-const select = body.querySelector('.breed-select');
-const catInfo = body.querySelector('.cat-info');
-const loader = body.querySelector('.loader');
-const errorEl = body.querySelector('.error');
 
-function breedSelect(breeds) {
-  const selectItems = breeds.map(({ name, id }) => {
-    return `<option value="${id}">${name}</option>`;
-  });
-  select.innerHTML = selectItems.join('');
+const select = document.querySelector('.breed-select');
+const loader = document.querySelector('.loader');
+const error = document.querySelector('.error');
+const container = document.querySelector('.cat-info');
+
+
+select.addEventListener('change', handlerClick);
+
+function handlerClick(e) {
+  const breeds = e.target.value;
+  loader.hidden = false;
+  select.hidden = true;
+  container.hidden = true;
+
+  fetchCatByBreed(breeds)
+    .then(data => {
+      container.innerHTML = createMarkup(data);
+    })
+    .catch(error => {
+      Notiflix.Report.failure(
+        'Oops!',
+        'Something went wrong! Try reloading the page!',
+        'Ok'
+      );
+    })
+    .finally(() => {
+      loader.hidden = true;
+      select.hidden = false;
+      container.hidden = false;
+    });
 }
 
-window.addEventListener('load', event => {
-  loader.classList.remove('hidden');
-  select.classList.add('hidden');
-  errorEl.classList.add('hidden');
-
+function createOptions() {
+  select.hidden = true;
   fetchBreeds()
-    .then(breeds => {
-      breedSelect(breeds);
-      loader.classList.add('hidden');
-      select.classList.remove('hidden');
+    .then(data => {
+      select.innerHTML = data
+        .map(
+          el => `
+<option value="${el.id}">${el.name}</option>
+`
+        )
+        .join('');
+      new SlimSelect({
+        select: '#selectCat',
+        settings: {
+          placeholderText: 'Select Cat',
+        },
+      });
     })
     .catch(error => {
-      loader.classList.add('hidden');
-      errorEl.classList.remove('hidden');
-      console.log(error);
-    });
-});
-
-select.addEventListener('change', event => {
-  const breedId = event.target.value;
-
-  catInfo.classList.add('hidden');
-  loader.classList.remove('hidden');
-
-  fetchBreeds()
-    .then(response => {
-      const breeds = response;
-      const breed = breeds.find(item => item.id === breedId);
-
-      fetchCatByBreed(breedId)
-        .then(data => {
-          catInfo.innerHTML = `
-            <img src="${data.url}" alt="Cat" width = "560">
-            <h2>${breed.name}</h2>
-            <p>${breed.description}</p>
-            <p><b>Temperament:</b> ${breed.temperament}</p>
-          `;
-          loader.classList.add('hidden');
-          catInfo.classList.remove('hidden');
-        })
-        .catch(error => {
-          console.log(error);
-          loader.classList.add('hidden');
-          errorEl.classList.remove('hidden');
-        });
+      Notiflix.Report.failure(
+        'Oops!',
+        'Something went wrong! Try reloading the page!',
+        'Ok'
+      );
+      error();
     })
-    .catch(error => {
-      loader.classList.add('hidden');
-      errorEl.classList.remove('hidden');
-      console.log(error);
+    .finally(() => {
+      error.hidden = true;
+      loader.hidden = true;
+      select.hidden = false;
     });
-});
+}
+createOptions();
+
+function createMarkup(array) {
+  return array
+    .map(({ url, breeds: [{ description, name, temperament }] }) => {
+      return `<img src="${url}" alt="${name}" width="400"/>
+    <h2 ">${name}</h2>
+    <p>${description}</p>
+    <h3>Temperament</h3>
+    <p>${temperament}</p>`;
+    })
+    .join('');
+}
